@@ -4,11 +4,23 @@
     <meta charset="utf-8">
     <title>2022-11-2</title>
     <meta name="description" content="2022-11-2 daily record">
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://cdn.staticfile.org/babel-standalone/6.26.0/babel.min.js"></script>
     <script src='sql-wasm.js'></script>
-    <script>
-      var globalDb={}
-      // CREATE TABLE 'originaldata1' ('name' TEXT,'path' TEXT,'type' TEXT);
-      initSqlJs().then(function(SQL){
+    <!--[if lt IE 9]>
+	<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    网址整理saas工具可直接用易用平台webapp搜索集合文档api国内访问网站网页paasiaas
+    <div id="list"></div>
+    <script type="text/babel">
+            const ListComponent = function(){
+              const [res, setRes]=React.useState([])
+              React.useEffect(()=>{
+        // CREATE TABLE 'originaldata1' ('name' TEXT,'path' TEXT,'type' TEXT);
+        initSqlJs().then(function(SQL){
         const xhr = new XMLHttpRequest();
         xhr.open('GET', '/2022-11-2/original-data.db', true);
         xhr.responseType = 'arraybuffer';
@@ -16,19 +28,26 @@
           const uInt8Array = new Uint8Array(xhr.response);
           const db = new SQL.Database(uInt8Array);
           console.log('db',db);
-          const res = db.run("SELECT * FROM originaldata1");
+          const res = db.exec("SELECT * FROM originaldata1");
           console.log('res',res)
-          globalDb=db
+          setRes(res)
         };
         xhr.send();
       });
+},[])
+              return (<div>
+                {res.length>0 ? <div>{res[0].columns[0]},{res[0].columns[1]},{res[0].columns[2]}</div> : null}
+              {res.length>0 ? res[0].values.map((element,index) => {
+                console.log(index);
+                return (<div key={index}>{res[0].values[index][0]},{res[0].values[index][1]},{res[0].values[index][2]}</div>)
+              }) : null}
+              </div>
+              )
+      }
+        const root=ReactDOM.createRoot( 
+                document.getElementById('list')
+        );
+        root.render(<ListComponent />)
     </script>
-    <!--[if lt IE 9]>
-	<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-  </head>
-  <body>
-    网址整理saas工具可直接用易用平台webapp搜索集合文档api国内访问网站网页paasiaas
-    
   </body>
 </html>
