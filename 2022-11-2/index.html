@@ -8,7 +8,7 @@
     <script>
       var globalDb={}
       // CREATE TABLE 'originaldata1' ('name' TEXT,'path' TEXT,'type' TEXT);
-      initSqlJs(config).then(function(SQL){
+      initSqlJs().then(function(SQL){
         const xhr = new XMLHttpRequest();
         xhr.open('GET', '/2022-11-2/original-data.db', true);
         xhr.responseType = 'arraybuffer';
